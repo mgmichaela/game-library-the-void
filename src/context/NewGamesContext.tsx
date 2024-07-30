@@ -1,11 +1,13 @@
 import { createContext, useState, useEffect, ReactNode, FC } from "react";
 import axios from "axios";
-import { getUpcomingGamesURL as getNewGamesURL } from "../api";
+import { getNewGamesURL } from "../api";
 
 interface GameResult {
   slug: string;
   name: string;
   playtime: number;
+  released: string;
+  background_image: string;
   platforms: {
     id: number;
     name: string;
