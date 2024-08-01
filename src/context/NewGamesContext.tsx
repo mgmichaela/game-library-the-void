@@ -1,4 +1,11 @@
-import { createContext, useState, useEffect, ReactNode, FC } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  FC,
+  useContext,
+} from "react";
 import axios from "axios";
 import { getNewGamesURL } from "../api";
 
@@ -8,8 +15,8 @@ interface GameResult {
   playtime: number;
   released: string;
   background_image: string;
+  id: number;
   platforms: {
-    id: number;
     name: string;
     slug: string;
   };
@@ -24,20 +31,20 @@ interface ApiResponse {
 
 export interface NexGamesContextType {
   newGames: ApiResponse | null;
-  loading: boolean;
-  error: Error | null;
+  loadingNewGames: boolean;
+  newGamesError: Error | null;
 }
 
 const NewGamesContext = createContext<NexGamesContextType>({
   newGames: null,
-  loading: false,
-  error: null,
+  loadingNewGames: false,
+  newGamesError: null,
 });
 
-const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [newGames, setNewGames] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [loadingNewGames, setLoadingNewGames] = useState<boolean>(true);
+  const [newGamesError, setNewGamesError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchNewGames = async () => {
@@ -46,12 +53,16 @@ const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setNewGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          setError(err);
+          setNewGamesError(err);
         } else {
-          setError(new Error("An unexpected error occurred"));
+          setNewGamesError(
+            new Error(
+              "Failed to load new games. Please try refreshing the page."
+            )
+          );
         }
       } finally {
-        setLoading(false);
+        setLoadingNewGames(false);
       }
     };
 
@@ -60,8 +71,8 @@ const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const value: NexGamesContextType = {
     newGames,
-    loading,
-    error,
+    loadingNewGames,
+    newGamesError,
   };
 
   return (
@@ -71,4 +82,5 @@ const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export { NewGamesProvider, NewGamesContext };
+export const useNewGamesContext = (): NexGamesContextType =>
+  useContext(NewGamesContext);

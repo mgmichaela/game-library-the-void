@@ -29,7 +29,7 @@ h3 {
     font-size: 1.3rem;
     font-weight: 500;
     color: #333;
-    padding: 0.5rem;
+    padding: 1.5rem 0;
 }
 p {
     font-size: 1.2rem;

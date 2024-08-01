@@ -1,4 +1,11 @@
-import { createContext, useState, useEffect, ReactNode, FC } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  FC,
+  useContext,
+} from "react";
 import axios from "axios";
 import { getUpcomingGamesURL } from "../api";
 
@@ -8,8 +15,8 @@ export interface GameResult {
   playtime: number;
   released: string;
   background_image: string;
+  id: number;
   platforms: {
-    id: number;
     name: string;
     slug: string;
   };
@@ -24,20 +31,25 @@ interface ApiResponse {
 
 export interface UpcomingGamesContextType {
   upcomingGames: ApiResponse | null;
-  loading: boolean;
-  error: Error | null;
+  loadingUpcomingGames: boolean;
+  upcomingGamesError: Error | null;
 }
 
 const UpcomingGamesContext = createContext<UpcomingGamesContextType>({
   upcomingGames: null,
-  loading: false,
-  error: null,
+  loadingUpcomingGames: false,
+  upcomingGamesError: null,
 });
 
-const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [upcomingGames, setUpcomingGames] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [loadingUpcomingGames, setLoadingUpcomingGames] =
+    useState<boolean>(true);
+  const [upcomingGamesError, setUpcomingGamesError] = useState<Error | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchUpcomingGames = async () => {
@@ -46,12 +58,16 @@ const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setUpcomingGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          setError(err);
+          setUpcomingGamesError(err);
         } else {
-          setError(new Error("An unexpected error occurred"));
+          setUpcomingGamesError(
+            new Error(
+              "Failed to load upcoming games. Please try refreshing the page."
+            )
+          );
         }
       } finally {
-        setLoading(false);
+        setLoadingUpcomingGames(false);
       }
     };
 
@@ -60,8 +76,8 @@ const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const value: UpcomingGamesContextType = {
     upcomingGames,
-    loading,
-    error,
+    loadingUpcomingGames,
+    upcomingGamesError,
   };
 
   return (
@@ -71,4 +87,5 @@ const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export { UpcomingGamesProvider, UpcomingGamesContext };
+export const useUpcomingGamesContext = (): UpcomingGamesContextType =>
+  useContext(UpcomingGamesContext);

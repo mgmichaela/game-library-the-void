@@ -1,4 +1,11 @@
-import { createContext, useState, useEffect, ReactNode, FC } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  FC,
+  useContext,
+} from "react";
 import axios from "axios";
 import { getPopularGamesURL } from "../api";
 
@@ -8,8 +15,8 @@ interface GameResult {
   playtime: number;
   released: string;
   background_image: string;
+  id: number;
   platforms: {
-    id: number;
     name: string;
     slug: string;
   };
@@ -24,20 +31,24 @@ interface ApiResponse {
 
 export interface PopularGamesContextType {
   popularGames: ApiResponse | null;
-  loading: boolean;
-  error: Error | null;
+  loadingPopularGames: boolean;
+  popularGamesError: Error | null;
 }
 
 const PopularGamesContext = createContext<PopularGamesContextType>({
   popularGames: null,
-  loading: false,
-  error: null,
+  loadingPopularGames: false,
+  popularGamesError: null,
 });
 
-const PopularGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const PopularGamesProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [popularGames, setPopularGames] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [loadingPopularGames, setLoadingPopularGames] = useState<boolean>(true);
+  const [popularGamesError, setPopularGamesError] = useState<Error | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchPopularGames = async () => {
@@ -46,12 +57,16 @@ const PopularGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setPopularGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          setError(err);
+          setPopularGamesError(err);
         } else {
-          setError(new Error("An unexpected error occurred"));
+          setPopularGamesError(
+            new Error(
+              "Failed to load popular games. Please try refreshing the page."
+            )
+          );
         }
       } finally {
-        setLoading(false);
+        setLoadingPopularGames(false);
       }
     };
 
@@ -60,8 +75,8 @@ const PopularGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const value: PopularGamesContextType = {
     popularGames,
-    loading,
-    error,
+    loadingPopularGames,
+    popularGamesError,
   };
 
   return (
@@ -71,4 +86,5 @@ const PopularGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export { PopularGamesProvider, PopularGamesContext };
+export const usePopularGamesContext = (): PopularGamesContextType =>
+  useContext(PopularGamesContext);
