@@ -1,5 +1,5 @@
-import { FC, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, useState } from "react";
+import { Link } from "react-router-dom";
 import { usePopularGamesContext } from "../context/PopularGamesContext";
 import Game from "../components/Game";
 import Loader from "../components/Loader";
@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useNewGamesContext } from "../context/NewGamesContext";
 import GameDetails from "./GameDetails";
-import { get } from "http";
 
 const Games: FC = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -32,8 +31,6 @@ const Games: FC = () => {
     <GameWrapper>
       <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
         {isClicked && <GameDetails />}
-        {/* {!isClicked && (
-          <> */}
         {upcomingGames && (
           <>
             <h2>Upcoming Games</h2>
@@ -90,8 +87,6 @@ const Games: FC = () => {
             </GamesStyling>
           </>
         )}
-        {/* </>
-        )} */}
       </Link>
     </GameWrapper>
   );

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  FC,
-  useContext,
-} from "react";
+import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
 import { gameScreenshotsURL } from "../api";
 
