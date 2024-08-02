@@ -55,8 +55,12 @@ const Card = styled(motion.div)`
   text-align: center;
   border-radius: 1rem;
   cursor: pointer;
+
   img {
     width: 100%;
+    border-radius: 0 0 1rem 1rem;
+    display: block;
+    object-fit: cover;
   }
 `;
 
