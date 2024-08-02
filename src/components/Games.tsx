@@ -1,4 +1,5 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { usePopularGamesContext } from "../context/PopularGamesContext";
 import Game from "../components/Game";
 import Loader from "../components/Loader";
@@ -7,6 +8,7 @@ import { motion } from "framer-motion";
 import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useNewGamesContext } from "../context/NewGamesContext";
 import GameDetails from "./GameDetails";
+import { get } from "http";
 
 const Games: FC = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -28,63 +30,69 @@ const Games: FC = () => {
 
   return (
     <GameWrapper>
-      {isClicked &&
-        (!loadingPopularGames || !loadingNewGames || !loadingUpcomingGames) && (
-          <GameDetails />
+      <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
+        {isClicked && <GameDetails />}
+        {/* {!isClicked && (
+          <> */}
+        {upcomingGames && (
+          <>
+            <h2>Upcoming Games</h2>
+            <GamesStyling>
+              {upcomingGames.results.map((game) => (
+                <Game
+                  key={game.id}
+                  name={game.name}
+                  released={game.released}
+                  image={game.background_image}
+                  gameID={game.id}
+                  setIsClicked={setIsClicked}
+                  isClicked={isClicked}
+                />
+              ))}
+            </GamesStyling>
+          </>
         )}
-      {upcomingGames && (
-        <>
-          <h2>Upcoming Games</h2>
-          <GamesStyling>
-            {upcomingGames.results.map((game) => (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                image={game.background_image}
-                gameID={game.id}
-                setIsClicked={setIsClicked}
-              />
-            ))}
-          </GamesStyling>
-        </>
-      )}
 
-      {popularGames && (
-        <>
-          <h2>Popular Games</h2>
-          <GamesStyling>
-            {popularGames.results.map((game) => (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                image={game.background_image}
-                gameID={game.id}
-                setIsClicked={setIsClicked}
-              />
-            ))}
-          </GamesStyling>
-        </>
-      )}
+        {popularGames && (
+          <>
+            <h2>Popular Games</h2>
+            <GamesStyling>
+              {popularGames.results.map((game) => (
+                <Game
+                  key={game.id}
+                  name={game.name}
+                  released={game.released}
+                  image={game.background_image}
+                  gameID={game.id}
+                  setIsClicked={setIsClicked}
+                  isClicked={isClicked}
+                />
+              ))}
+            </GamesStyling>
+          </>
+        )}
 
-      {newGames && (
-        <>
-          <h2>New Games</h2>
-          <GamesStyling>
-            {newGames.results.map((game) => (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                image={game.background_image}
-                gameID={game.id}
-                setIsClicked={setIsClicked}
-              />
-            ))}
-          </GamesStyling>
-        </>
-      )}
+        {newGames && (
+          <>
+            <h2>New Games</h2>
+            <GamesStyling>
+              {newGames.results.map((game) => (
+                <Game
+                  key={game.id}
+                  name={game.name}
+                  released={game.released}
+                  image={game.background_image}
+                  gameID={game.id}
+                  setIsClicked={setIsClicked}
+                  isClicked={isClicked}
+                />
+              ))}
+            </GamesStyling>
+          </>
+        )}
+        {/* </>
+        )} */}
+      </Link>
     </GameWrapper>
   );
 };

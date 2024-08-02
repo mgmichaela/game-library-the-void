@@ -43,8 +43,6 @@ export const GameDetailsProvider: FC<{ children: ReactNode }> = ({
   const [loadingGameDetails, setLoadingGameDetails] = useState<boolean>(true);
   const [gameDetailsError, setGameDetailsError] = useState<Error | null>(null);
 
-  console.log("game details:", gameDetails);
-
   const fetchGameDetails = async (gameID: number) => {
     try {
       const response = await axios.get<ApiResponse>(gameDetailsURL(gameID));

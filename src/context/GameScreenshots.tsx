@@ -43,8 +43,6 @@ export const GameScreenshotsProvider: FC<{ children: ReactNode }> = ({
   const [gameScreenshotsError, setGameScreenshotsError] =
     useState<Error | null>(null);
 
-  console.log("game screenshots:", gameScreenshots);
-
   const fetchGameScreenshots = async (gameID: number) => {
     try {
       const response = await axios.get<ApiResponse>(gameScreenshotsURL(gameID));

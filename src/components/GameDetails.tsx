@@ -2,10 +2,13 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshots";
+import Loader from "./Loader";
 
 const GameDetails = () => {
-  const { gameDetails } = useGameDetails();
-  const { gameScreenshots } = useGameScreenshots();
+  const { gameDetails, loadingGameDetails } = useGameDetails();
+  const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
+
+  if (loadingGameDetails || loadingGameScreenshots) return <Loader />;
 
   return (
     <CardShadow>
@@ -18,7 +21,7 @@ const GameDetails = () => {
           <Info>
             <h3>Platforms</h3>
             <Platforms>
-              {gameDetails?.platforms.map((platformItem: any) => (
+              {gameDetails?.platforms.map((platformItem) => (
                 <h3 key={platformItem.platform.id}>
                   {platformItem.platform.name}
                 </h3>
@@ -33,7 +36,7 @@ const GameDetails = () => {
           <p>{gameDetails?.description_raw}</p>
         </Description>
         <div className="gallery">
-          {gameScreenshots?.results.map((result: any) => (
+          {gameScreenshots?.results.map((result) => (
             <img key={result.id} src={result.image} alt="game image" />
           ))}
         </div>
@@ -50,6 +53,19 @@ const CardShadow = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 5;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #534c90;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
 `;
 
 const Detail = styled(motion.div)`
@@ -87,8 +103,6 @@ const Media = styled(motion.div)`
   margin-top: 5rem;
   img {
     width: 100%;
-    /* height: 60vh;
-    object-fit: cover; */
   }
 `;
 
