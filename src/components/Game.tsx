@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface GameProps {
   name: string;
@@ -24,7 +24,6 @@ const Game: FC<GameProps> = ({
 }) => {
   const { fetchGameDetails } = useGameDetails();
   const { fetchGameScreenshots } = useGameScreenshots();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const Game: FC<GameProps> = ({
     } else {
       navigate("/");
     }
-  }, [isClicked, navigate]);
+  }, [isClicked, navigate, gameID]);
 
   const handleCardClick = () => {
     fetchGameDetails(gameID);
@@ -43,11 +42,9 @@ const Game: FC<GameProps> = ({
 
   return (
     <Card onClick={handleCardClick}>
-      <Link to={`/game/${gameID}`} onClick={() => setIsClicked(false)}>
-        <h3>{name}</h3>
-        <p>{released}</p>
-        <img src={image} alt={name} />
-      </Link>
+      <h3>{name}</h3>
+      <p>{released}</p>
+      <img src={image} alt={name} />
     </Card>
   );
 };
