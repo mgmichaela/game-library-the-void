@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePopularGamesContext } from "../context/PopularGamesContext";
 import Game from "../components/Game";
@@ -9,7 +9,7 @@ import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useNewGamesContext } from "../context/NewGamesContext";
 import GameDetails from "./GameDetails";
 
-const Games: FC = () => {
+const Games = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const { popularGames, loadingPopularGames, popularGamesError } =
@@ -29,13 +29,15 @@ const Games: FC = () => {
 
   return (
     <GameWrapper>
-      <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
-        {isClicked && <GameDetails />}
-        {upcomingGames && (
-          <>
-            <h2>Upcoming Games</h2>
-            <GamesStyling>
-              {upcomingGames.results.map((game) => (
+      {isClicked && (
+        <GameDetails isClicked={isClicked} setIsClicked={setIsClicked} />
+      )}
+      {upcomingGames && (
+        <>
+          <h2>Upcoming Games</h2>
+          <GamesStyling>
+            {upcomingGames.results.map((game) => (
+              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
                 <Game
                   key={game.id}
                   name={game.name}
@@ -45,16 +47,18 @@ const Games: FC = () => {
                   setIsClicked={setIsClicked}
                   isClicked={isClicked}
                 />
-              ))}
-            </GamesStyling>
-          </>
-        )}
+              </Link>
+            ))}
+          </GamesStyling>
+        </>
+      )}
 
-        {popularGames && (
-          <>
-            <h2>Popular Games</h2>
-            <GamesStyling>
-              {popularGames.results.map((game) => (
+      {popularGames && (
+        <>
+          <h2>Popular Games</h2>
+          <GamesStyling>
+            {popularGames.results.map((game) => (
+              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
                 <Game
                   key={game.id}
                   name={game.name}
@@ -64,16 +68,18 @@ const Games: FC = () => {
                   setIsClicked={setIsClicked}
                   isClicked={isClicked}
                 />
-              ))}
-            </GamesStyling>
-          </>
-        )}
+              </Link>
+            ))}
+          </GamesStyling>
+        </>
+      )}
 
-        {newGames && (
-          <>
-            <h2>New Games</h2>
-            <GamesStyling>
-              {newGames.results.map((game) => (
+      {newGames && (
+        <>
+          <h2>New Games</h2>
+          <GamesStyling>
+            {newGames.results.map((game) => (
+              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
                 <Game
                   key={game.id}
                   name={game.name}
@@ -83,11 +89,11 @@ const Games: FC = () => {
                   setIsClicked={setIsClicked}
                   isClicked={isClicked}
                 />
-              ))}
-            </GamesStyling>
-          </>
-        )}
-      </Link>
+              </Link>
+            ))}
+          </GamesStyling>
+        </>
+      )}
     </GameWrapper>
   );
 };
