@@ -6,7 +6,7 @@ import { PopularGamesProvider } from "./context/PopularGamesContext";
 import { UpcomingGamesProvider } from "./context/UpcomingGamesContext";
 import { NewGamesProvider } from "./context/NewGamesContext";
 import { GameDetailsProvider } from "./context/GameDetailsContext";
-import { GameScreenshotsProvider } from "./context/GameScreenshots";
+import { GameScreenshotsProvider } from "./context/GameScreenshotsContext";
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(

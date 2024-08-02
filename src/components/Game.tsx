@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
-import { useGameScreenshots } from "../context/GameScreenshots";
+import { useGameScreenshots } from "../context/GameScreenshotsContext";
 import { Link, useNavigate } from "react-router-dom";
 
 interface GameProps {

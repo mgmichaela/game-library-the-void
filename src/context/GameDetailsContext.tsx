@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  FC,
-  useContext,
-} from "react";
+import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
 import { gameDetailsURL } from "../api";
 
@@ -40,10 +33,12 @@ export const GameDetailsProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [gameDetails, setGameDetails] = useState<ApiResponse | null>(null);
-  const [loadingGameDetails, setLoadingGameDetails] = useState<boolean>(true);
+  const [loadingGameDetails, setLoadingGameDetails] = useState<boolean>(false);
   const [gameDetailsError, setGameDetailsError] = useState<Error | null>(null);
 
   const fetchGameDetails = async (gameID: number) => {
+    setLoadingGameDetails(true);
+    // setGameDetails(null);
     try {
       const response = await axios.get<ApiResponse>(gameDetailsURL(gameID));
       setGameDetails(response.data);

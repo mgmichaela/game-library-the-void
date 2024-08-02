@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
-import { useGameScreenshots } from "../context/GameScreenshots";
+import { useGameScreenshots } from "../context/GameScreenshotsContext";
 import Loader from "./Loader";
 
 const GameDetails = () => {
