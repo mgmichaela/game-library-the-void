@@ -1,50 +1,33 @@
-import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface GameProps {
   name: string;
   released: string;
   image: string;
   gameID: number;
-  setIsClicked: Dispatch<SetStateAction<boolean>>;
-  isClicked: boolean;
 }
 
-const Game: FC<GameProps> = ({
-  name,
-  released,
-  image,
-  gameID,
-  setIsClicked,
-  isClicked,
-}) => {
+const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
   const { fetchGameDetails } = useGameDetails();
   const { fetchGameScreenshots } = useGameScreenshots();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isClicked) {
-      navigate(`/game/${gameID}`);
-    } else {
-      navigate("/");
-    }
-  }, [isClicked, navigate, gameID]);
 
   const handleCardClick = () => {
     fetchGameDetails(gameID);
     fetchGameScreenshots(gameID);
-    setIsClicked(true);
   };
 
   return (
     <Card onClick={handleCardClick}>
-      <h3>{name}</h3>
-      <p>{released}</p>
-      <img src={image} alt={name} />
+      <Link to={`games/${gameID}`}>
+        <h3>{name}</h3>
+        <p>{released}</p>
+        <img src={image} alt={name} />
+      </Link>
     </Card>
   );
 };
@@ -58,6 +41,7 @@ const Card = styled(motion.div)`
 
   img {
     width: 100%;
+    min-height: 30vh;
     border-radius: 0 0 1rem 1rem;
     display: block;
     object-fit: cover;

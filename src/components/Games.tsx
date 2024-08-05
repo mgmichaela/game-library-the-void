@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import { usePopularGamesContext } from "../context/PopularGamesContext";
 import Game from "../components/Game";
 import Loader from "../components/Loader";
@@ -7,11 +5,8 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useNewGamesContext } from "../context/NewGamesContext";
-import GameDetails from "./GameDetails";
 
 const Games = () => {
-  const [isClicked, setIsClicked] = useState(false);
-
   const { popularGames, loadingPopularGames, popularGamesError } =
     usePopularGamesContext();
 
@@ -29,25 +24,18 @@ const Games = () => {
 
   return (
     <GameWrapper>
-      {isClicked && (
-        <GameDetails isClicked={isClicked} setIsClicked={setIsClicked} />
-      )}
       {upcomingGames && (
         <>
           <h2>Upcoming Games</h2>
           <GamesStyling>
             {upcomingGames.results.map((game) => (
-              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
-                <Game
-                  key={game.id}
-                  name={game.name}
-                  released={game.released}
-                  image={game.background_image}
-                  gameID={game.id}
-                  setIsClicked={setIsClicked}
-                  isClicked={isClicked}
-                />
-              </Link>
+              <Game
+                key={game.id}
+                name={game.name}
+                released={game.released}
+                image={game.background_image}
+                gameID={game.id}
+              />
             ))}
           </GamesStyling>
         </>
@@ -58,17 +46,13 @@ const Games = () => {
           <h2>Popular Games</h2>
           <GamesStyling>
             {popularGames.results.map((game) => (
-              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
-                <Game
-                  key={game.id}
-                  name={game.name}
-                  released={game.released}
-                  image={game.background_image}
-                  gameID={game.id}
-                  setIsClicked={setIsClicked}
-                  isClicked={isClicked}
-                />
-              </Link>
+              <Game
+                key={game.id}
+                name={game.name}
+                released={game.released}
+                image={game.background_image}
+                gameID={game.id}
+              />
             ))}
           </GamesStyling>
         </>
@@ -79,17 +63,13 @@ const Games = () => {
           <h2>New Games</h2>
           <GamesStyling>
             {newGames.results.map((game) => (
-              <Link to={`/`} onClick={() => setIsClicked(!isClicked)}>
-                <Game
-                  key={game.id}
-                  name={game.name}
-                  released={game.released}
-                  image={game.background_image}
-                  gameID={game.id}
-                  setIsClicked={setIsClicked}
-                  isClicked={isClicked}
-                />
-              </Link>
+              <Game
+                key={game.id}
+                name={game.name}
+                released={game.released}
+                image={game.background_image}
+                gameID={game.id}
+              />
             ))}
           </GamesStyling>
         </>
@@ -108,7 +88,7 @@ const GameWrapper = styled(motion.div)`
 const GamesStyling = styled(motion.div)`
   min-height: 80vh;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
 `;

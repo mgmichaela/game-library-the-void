@@ -2,55 +2,52 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
-import Loader from "./Loader";
 import { Link } from "react-router-dom";
-import { Dispatch, FC, SetStateAction } from "react";
+import Loader from "./Loader";
 
-interface GameDetailsProps {
-  isClicked: boolean;
-  setIsClicked: Dispatch<SetStateAction<boolean>>;
-}
-
-const GameDetails: FC<GameDetailsProps> = ({ isClicked, setIsClicked }) => {
+const GameDetails = () => {
   const { gameDetails, loadingGameDetails } = useGameDetails();
   const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
 
-  if (loadingGameDetails || loadingGameScreenshots) return <Loader />;
+  if (loadingGameDetails && loadingGameScreenshots) return <Loader />;
 
   return (
-    <Link to={`/game/:id`} onClick={() => setIsClicked(!isClicked)}>
-      <CardShadow>
-        <Detail>
-          <Stats>
-            <div className="rating">
-              <h3>{gameDetails?.name}</h3>
-              <p>Rating: {gameDetails?.rating}</p>
+    !loadingGameDetails &&
+    !loadingGameScreenshots && (
+      <Link to="/">
+        <CardShadow>
+          <Detail>
+            <Stats>
+              <div className="rating">
+                <h3>{gameDetails?.name}</h3>
+                <p>Rating: {gameDetails?.rating}</p>
+              </div>
+              <Info>
+                <h3>Platforms</h3>
+                <Platforms>
+                  {gameDetails?.platforms.map((platformItem) => (
+                    <h3 key={platformItem.platform.id}>
+                      {platformItem.platform.name}
+                    </h3>
+                  ))}
+                </Platforms>
+              </Info>
+            </Stats>
+            <Media>
+              <img src={gameDetails?.background_image} alt="image" />
+            </Media>
+            <Description>
+              <p>{gameDetails?.description_raw}</p>
+            </Description>
+            <div className="gallery">
+              {gameScreenshots?.results.map((result) => (
+                <img key={result.id} src={result.image} alt="game image" />
+              ))}
             </div>
-            <Info>
-              <h3>Platforms</h3>
-              <Platforms>
-                {gameDetails?.platforms.map((platformItem) => (
-                  <h3 key={platformItem.platform.id}>
-                    {platformItem.platform.name}
-                  </h3>
-                ))}
-              </Platforms>
-            </Info>
-          </Stats>
-          <Media>
-            <img src={gameDetails?.background_image} alt="image" />
-          </Media>
-          <Description>
-            <p>{gameDetails?.description_raw}</p>
-          </Description>
-          <div className="gallery">
-            {gameScreenshots?.results.map((result) => (
-              <img key={result.id} src={result.image} alt="game image" />
-            ))}
-          </div>
-        </Detail>
-      </CardShadow>
-    </Link>
+          </Detail>
+        </CardShadow>
+      </Link>
+    )
   );
 };
 
