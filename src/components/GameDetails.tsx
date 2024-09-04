@@ -4,13 +4,14 @@ import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
-
 import playstation from "../images/playstation.svg";
 import steam from "../images/steam.svg";
 import xbox from "../images/xbox.svg";
 import nintendo from "../images/nintendo.svg";
 import apple from "../images/apple.svg";
 import gamepad from "../images/gamepad.svg";
+import starFull from "../images/star-full.png";
+import starEmpty from "../images/star-empty.png";
 
 const GameDetails = () => {
   const navigate = useNavigate();
@@ -40,6 +41,19 @@ const GameDetails = () => {
       default:
         return gamepad;
     }
+  };
+
+  const getStars = () => {
+    const stars = [];
+    const rating = Math.floor(gameDetails?.rating as number);
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<img alt="star" key={i} src={starFull}></img>);
+      } else {
+        stars.push(<img alt="star" key={i} src={starEmpty}></img>);
+      }
+    }
+    return stars;
   };
 
   const { gameDetails, loadingGameDetails } = useGameDetails();
@@ -73,6 +87,7 @@ const GameDetails = () => {
               >
                 <h3>{gameDetails?.name}</h3>
                 <p>Rating: {gameDetails?.rating}</p>
+                {getStars()}
               </motion.div>
               <Info>
                 <h3>Platforms</h3>
@@ -171,6 +186,11 @@ const Stats = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  img {
+    width: 2rem;
+    height: 2rem;
+    display: inline;
+  }
 `;
 
 const Info = styled(motion.div)`
