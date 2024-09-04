@@ -5,6 +5,13 @@ import { useGameScreenshots } from "../context/GameScreenshotsContext";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
 
+import playstation from "../images/playstation.svg";
+import steam from "../images/steam.svg";
+import xbox from "../images/xbox.svg";
+import nintendo from "../images/nintendo.svg";
+import apple from "../images/apple.svg";
+import gamepad from "../images/gamepad.svg";
+
 const GameDetails = () => {
   const navigate = useNavigate();
 
@@ -15,6 +22,23 @@ const GameDetails = () => {
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0";
       navigate("/");
+    }
+  };
+
+  const getPlatform = (platform: string) => {
+    switch (platform) {
+      case "PlayStation 4":
+        return playstation;
+      case "Xbox One":
+        return xbox;
+      case "PC":
+        return steam;
+      case "Nintendo Switch":
+        return nintendo;
+      case "iOS":
+        return apple;
+      default:
+        return gamepad;
     }
   };
 
@@ -54,15 +78,15 @@ const GameDetails = () => {
                 <h3>Platforms</h3>
                 <Platforms>
                   {gameDetails?.platforms.map((platformItem) => (
-                    <motion.h3
+                    <motion.img
                       key={platformItem.platform.id}
+                      src={getPlatform(platformItem.platform.name)}
+                      alt={platformItem.platform.name}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.2 }}
-                    >
-                      {platformItem.platform.name}
-                    </motion.h3>
+                    ></motion.img>
                   ))}
                 </Platforms>
               </Info>
