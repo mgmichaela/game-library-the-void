@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
-import { gameDetailsURL } from "../api";
+import { gameDetailsURL } from "../api/api";
 
 interface Platform {
   id: number;
@@ -20,6 +20,7 @@ export interface GameDetailsType {
   fetchGameDetails: (gameID: number) => void;
   loadingGameDetails: boolean;
   gameDetailsError: Error | null;
+  currentGameID: number | null;
 }
 
 const GameDetailsContext = createContext<GameDetailsType>({
@@ -27,6 +28,7 @@ const GameDetailsContext = createContext<GameDetailsType>({
   fetchGameDetails: () => {},
   loadingGameDetails: false,
   gameDetailsError: null,
+  currentGameID: null,
 });
 
 export const GameDetailsProvider: FC<{ children: ReactNode }> = ({
@@ -35,12 +37,13 @@ export const GameDetailsProvider: FC<{ children: ReactNode }> = ({
   const [gameDetails, setGameDetails] = useState<ApiResponse | null>(null);
   const [loadingGameDetails, setLoadingGameDetails] = useState<boolean>(false);
   const [gameDetailsError, setGameDetailsError] = useState<Error | null>(null);
+  const [currentGameID, setCurrentGameID] = useState<number | null>(null);
 
   const fetchGameDetails = async (gameID: number) => {
     setLoadingGameDetails(true);
-    // setGameDetails(null);
     try {
       const response = await axios.get<ApiResponse>(gameDetailsURL(gameID));
+      setCurrentGameID(gameID);
       setGameDetails(response.data);
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -58,6 +61,7 @@ export const GameDetailsProvider: FC<{ children: ReactNode }> = ({
     fetchGameDetails,
     loadingGameDetails,
     gameDetailsError,
+    currentGameID,
   };
 
   return (

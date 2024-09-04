@@ -86,7 +86,6 @@ const GameWrapper = styled(motion.div)`
 `;
 
 const GamesStyling = styled(motion.div)`
-  min-height: 80vh;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 3rem;

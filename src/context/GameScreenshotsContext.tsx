@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
-import { gameScreenshotsURL } from "../api";
+import { gameScreenshotsURL } from "../api/api";
 
 interface ApiResponse {
   results: {

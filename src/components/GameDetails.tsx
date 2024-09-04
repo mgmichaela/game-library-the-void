@@ -1,53 +1,109 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
-import { Link } from "react-router-dom";
 import Loader from "./Loader";
+import { useNavigate } from "react-router-dom";
 
 const GameDetails = () => {
+  const navigate = useNavigate();
+
+  const goBack = (e: React.MouseEvent<HTMLDivElement>) => {
+    const element = e.currentTarget;
+
+    if (element.classList.contains("shadow")) {
+      document.body.style.overflow = "auto";
+      document.body.style.paddingRight = "0";
+      navigate("/");
+    }
+  };
+
   const { gameDetails, loadingGameDetails } = useGameDetails();
   const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
 
   if (loadingGameDetails && loadingGameScreenshots) return <Loader />;
 
   return (
-    !loadingGameDetails &&
-    !loadingGameScreenshots && (
-      <Link to="/">
-        <CardShadow>
-          <Detail>
+    <AnimatePresence>
+      {!loadingGameDetails && !loadingGameScreenshots && (
+        <CardShadow
+          className="shadow"
+          onClick={goBack}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Detail
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <Stats>
-              <div className="rating">
+              <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
                 <h3>{gameDetails?.name}</h3>
                 <p>Rating: {gameDetails?.rating}</p>
-              </div>
+              </motion.div>
               <Info>
                 <h3>Platforms</h3>
                 <Platforms>
                   {gameDetails?.platforms.map((platformItem) => (
-                    <h3 key={platformItem.platform.id}>
+                    <motion.h3
+                      key={platformItem.platform.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.2 }}
+                    >
                       {platformItem.platform.name}
-                    </h3>
+                    </motion.h3>
                   ))}
                 </Platforms>
               </Info>
             </Stats>
             <Media>
-              <img src={gameDetails?.background_image} alt="image" />
+              <motion.img
+                src={gameDetails?.background_image}
+                alt="image"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              />
             </Media>
             <Description>
-              <p>{gameDetails?.description_raw}</p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {gameDetails?.description_raw}
+              </motion.p>
             </Description>
-            <div className="gallery">
+            <motion.div className="gallery">
               {gameScreenshots?.results.map((result) => (
-                <img key={result.id} src={result.image} alt="game image" />
+                <motion.img
+                  key={result.id}
+                  src={result.image}
+                  alt="game image"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                />
               ))}
-            </div>
+            </motion.div>
           </Detail>
         </CardShadow>
-      </Link>
-    )
+      )}
+    </AnimatePresence>
   );
 };
 

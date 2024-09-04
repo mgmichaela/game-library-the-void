@@ -7,7 +7,7 @@ import {
   useContext,
 } from "react";
 import axios from "axios";
-import { getPopularGamesURL } from "../api";
+import { getPopularGamesURL } from "../api/api";
 
 interface GameResult {
   slug: string;
