@@ -8,6 +8,7 @@ import { GameDetailsProvider } from "./context/GameDetailsContext";
 import { GameScreenshotsProvider } from "./context/GameScreenshotsContext";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes";
+import { GameSearchProvider } from "./context/SearchContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +20,9 @@ root.render(
         <NewGamesProvider>
           <GameDetailsProvider>
             <GameScreenshotsProvider>
-              <RouterProvider router={router} />
+              <GameSearchProvider>
+                <RouterProvider router={router} />
+              </GameSearchProvider>
             </GameScreenshotsProvider>
           </GameDetailsProvider>
         </NewGamesProvider>

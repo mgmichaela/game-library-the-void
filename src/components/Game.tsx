@@ -40,7 +40,8 @@ const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
 
 const Card = styled(motion.div)`
   height: 25rem;
-  box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px #2c1b46;
+  border: 2px solid #714c9d;
   text-align: center;
   border-radius: 1rem;
   cursor: pointer;
@@ -55,7 +56,7 @@ const Card = styled(motion.div)`
 
   p {
     font-size: 0.9rem;
-    color: #888;
+    color: #696969;
   }
 
   img {
