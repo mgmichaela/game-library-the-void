@@ -52,7 +52,7 @@ const StyledNav = styled(motion.nav)`
   padding: 3rem 5rem;
   text-align: center;
   input {
-    width: 30%;
+    min-width: 30%;
     font-size: 1rem;
     padding: 0.5rem;
     border: none;

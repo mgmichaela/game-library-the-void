@@ -119,6 +119,14 @@ const GameWrapper = styled(motion.div)`
   h2 {
     padding: 5rem 0rem;
   }
+
+  @media (max-width: 576px) {
+    padding: 0rem 1rem;
+    h2 {
+      font-size: 1.5rem;
+      padding: 0 0 1.5rem 0;
+    }
+  }
 `;
 
 const GamesStyling = styled(motion.div)`
@@ -126,6 +134,17 @@ const GamesStyling = styled(motion.div)`
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-column-gap: 2rem;
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr; /* Single column layout for small screens */
+    grid-column-gap: 1rem;
+    grid-row-gap: 2rem;
+  }
 `;
 
 export default Games;

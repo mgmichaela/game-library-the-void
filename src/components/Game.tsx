@@ -66,6 +66,28 @@ const Card = styled(motion.div)`
     object-fit: cover;
     border-radius: 0 0 1rem 1rem;
   }
+
+  @media (max-width: 768px) {
+    height: 20rem;
+    h3 {
+      font-size: 1rem;
+      margin: 0.5rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    height: 18rem;
+    h3 {
+      font-size: 0.75rem;
+      margin: 0.5rem;
+    }
+    p {
+      font-size: 0.65rem;
+    }
+  }
 `;
 
 export default Game;
