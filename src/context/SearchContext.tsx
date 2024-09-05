@@ -63,7 +63,6 @@ export const GameSearchProvider: FC<{ children: ReactNode }> = ({
       const response = await axios.get<SearchApiResponse>(
         searchGamesURL(query, page)
       );
-      console.log("response", response);
       setSearchResults(response.data.results);
       setTotalResults(response.data.count);
       setNextPage(response.data.next);
