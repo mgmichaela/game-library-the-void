@@ -161,11 +161,7 @@ const CardShadow = styled(motion.div)`
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #534c90;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: white;
+    background: #714c9d;
   }
 `;
 
