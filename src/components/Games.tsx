@@ -8,6 +8,7 @@ import { useNewGamesContext } from "../context/NewGamesContext";
 import { useGameSearch } from "../context/SearchContext";
 import Pagination from "./Pagination";
 import { GameListApiResponse, GameResult } from "../types/types";
+import { fadeIn } from "../animations/animation";
 
 const forbidden = process.env.REACT_APP_FORBIDDEN_WORDS
   ? process.env.REACT_APP_FORBIDDEN_WORDS.split(",")
@@ -22,9 +23,15 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
 
   const { newGames, loadingNewGames, newGamesError } = useNewGamesContext();
 
-  const { searchResults, totalResults, searchedGameName } = useGameSearch();
+  const { searchResults, totalResults, searchedGameName, loadingSearch } =
+    useGameSearch();
 
-  if (loadingPopularGames || loadingNewGames || loadingUpcomingGames)
+  if (
+    loadingPopularGames ||
+    loadingNewGames ||
+    loadingUpcomingGames ||
+    loadingSearch
+  )
     return (
       <LoaderWrapper>
         <Loader />
@@ -46,7 +53,7 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
   };
 
   return (
-    <GameWrapper>
+    <GameWrapper initial="hidden" animate="show" variants={fadeIn}>
       {showDefaultGames ? (
         <>
           {upcomingGames && (

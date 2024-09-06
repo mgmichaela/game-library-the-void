@@ -31,7 +31,7 @@ const Nav = ({
   };
 
   return (
-    <StyledNav initial="hidden" animate="show">
+    <StyledNav>
       <Logo onClick={clearSearched}>
         <img src={logo} alt="logo" />
         <h1>The Void</h1>
