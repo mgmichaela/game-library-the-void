@@ -33,7 +33,7 @@ h2 {
     font-family: "Abril Fatface";
     font-weight: lighter;
     color: #fff;
-    text-shadow: 1px 1px 2px #ff00a2, 0 0 1em #2c1b46, 0 0 0.2em #714c9d;
+    text-shadow: 1px 1px 1px #ff00a2, 0 0 0.5em #2c1b46, 0 0 0.1em #714c9d;
 }
 h3 {
     font-size: 1.3rem;

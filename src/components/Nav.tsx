@@ -72,7 +72,7 @@ const StyledNav = styled(motion.nav)`
     padding: 0.5rem 2rem;
     cursor: pointer;
     background: #714c9d;
-    color: white;
+    color: #fff;
     border-radius: 4px;
 
     &:hover {

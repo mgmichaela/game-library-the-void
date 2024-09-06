@@ -1,35 +1,11 @@
 import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
 import { searchGamesURL } from "../api/api";
-
-interface Game {
-  id: number;
-  name: string;
-  background_image: string;
-  rating: number;
-  released: string;
-}
-
-interface SearchApiResponse {
-  results: Game[];
-  count: number;
-  next: string | null;
-  previous: string | null;
-}
-
-export interface GameSearchType {
-  searchResults: Game[] | null;
-  searchGames: (query: string, page?: number) => void;
-  loadingSearch: boolean;
-  searchError: Error | null;
-  totalResults: number | null;
-  nextPage: string | null;
-  prevPage: string | null;
-  setTextInput: (text: string) => void;
-  textInput: string;
-  setSearchedGameName: (text: string) => void;
-  searchedGameName: string;
-}
+import {
+  GameSearchType,
+  GameResult,
+  GameListApiResponse,
+} from "../types/types";
 
 const GameSearchContext = createContext<GameSearchType>({
   searchResults: null,
@@ -48,7 +24,7 @@ const GameSearchContext = createContext<GameSearchType>({
 export const GameSearchProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [searchResults, setSearchResults] = useState<Game[] | null>(null);
+  const [searchResults, setSearchResults] = useState<GameResult[] | null>(null);
   const [loadingSearch, setLoadingSearch] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<Error | null>(null);
   const [totalResults, setTotalResults] = useState<number | null>(null);
@@ -60,7 +36,7 @@ export const GameSearchProvider: FC<{ children: ReactNode }> = ({
   const searchGames = async (query: string, page: number = 1) => {
     setLoadingSearch(true);
     try {
-      const response = await axios.get<SearchApiResponse>(
+      const response = await axios.get<GameListApiResponse>(
         searchGamesURL(query, page)
       );
       setSearchResults(response.data.results);

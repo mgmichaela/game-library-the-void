@@ -8,32 +8,7 @@ import {
 } from "react";
 import axios from "axios";
 import { getPopularGamesURL } from "../api/api";
-
-interface GameResult {
-  slug: string;
-  name: string;
-  playtime: number;
-  released: string;
-  background_image: string;
-  id: number;
-  platforms: {
-    name: string;
-    slug: string;
-  };
-}
-
-interface ApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: GameResult[];
-}
-
-export interface PopularGamesContextType {
-  popularGames: ApiResponse | null;
-  loadingPopularGames: boolean;
-  popularGamesError: Error | null;
-}
+import { PopularGamesContextType, GameListApiResponse } from "../types/types";
 
 const PopularGamesContext = createContext<PopularGamesContextType>({
   popularGames: null,
@@ -44,7 +19,9 @@ const PopularGamesContext = createContext<PopularGamesContextType>({
 export const PopularGamesProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [popularGames, setPopularGames] = useState<ApiResponse | null>(null);
+  const [popularGames, setPopularGames] = useState<GameListApiResponse | null>(
+    null
+  );
   const [loadingPopularGames, setLoadingPopularGames] = useState<boolean>(true);
   const [popularGamesError, setPopularGamesError] = useState<Error | null>(
     null
@@ -53,7 +30,9 @@ export const PopularGamesProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchPopularGames = async () => {
       try {
-        const response = await axios.get<ApiResponse>(getPopularGamesURL());
+        const response = await axios.get<GameListApiResponse>(
+          getPopularGamesURL()
+        );
         setPopularGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {

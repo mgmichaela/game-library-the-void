@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import styled from "styled-components";
 import { useGameSearch } from "../context/SearchContext";
 
@@ -6,6 +6,10 @@ const Pagination: FC = () => {
   const { textInput, nextPage, prevPage, searchGames } = useGameSearch();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [textInput]);
 
   const goToNextPage = () => {
     if (nextPage) {
@@ -20,6 +24,7 @@ const Pagination: FC = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
   return (
     <PaginationControls>
       <button onClick={goToPrevPage} disabled={!prevPage}>

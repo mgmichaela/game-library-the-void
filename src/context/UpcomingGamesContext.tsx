@@ -8,32 +8,7 @@ import {
 } from "react";
 import axios from "axios";
 import { getUpcomingGamesURL } from "../api/api";
-
-export interface GameResult {
-  slug: string;
-  name: string;
-  playtime: number;
-  released: string;
-  background_image: string;
-  id: number;
-  platforms: {
-    name: string;
-    slug: string;
-  };
-}
-
-interface ApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: GameResult[];
-}
-
-export interface UpcomingGamesContextType {
-  upcomingGames: ApiResponse | null;
-  loadingUpcomingGames: boolean;
-  upcomingGamesError: Error | null;
-}
+import { UpcomingGamesContextType, GameListApiResponse } from "../types/types";
 
 const UpcomingGamesContext = createContext<UpcomingGamesContextType>({
   upcomingGames: null,
@@ -44,7 +19,8 @@ const UpcomingGamesContext = createContext<UpcomingGamesContextType>({
 export const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [upcomingGames, setUpcomingGames] = useState<ApiResponse | null>(null);
+  const [upcomingGames, setUpcomingGames] =
+    useState<GameListApiResponse | null>(null);
   const [loadingUpcomingGames, setLoadingUpcomingGames] =
     useState<boolean>(true);
   const [upcomingGamesError, setUpcomingGamesError] = useState<Error | null>(
@@ -54,7 +30,9 @@ export const UpcomingGamesProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchUpcomingGames = async () => {
       try {
-        const response = await axios.get<ApiResponse>(getUpcomingGamesURL());
+        const response = await axios.get<GameListApiResponse>(
+          getUpcomingGamesURL()
+        );
         setUpcomingGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {

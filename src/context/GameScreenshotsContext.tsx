@@ -1,22 +1,10 @@
 import { createContext, useState, ReactNode, FC, useContext } from "react";
 import axios from "axios";
 import { gameScreenshotsURL } from "../api/api";
-
-interface ApiResponse {
-  results: {
-    height: number;
-    width: number;
-    id: number;
-    image: string;
-  }[];
-}
-
-export interface GameScreenshotsType {
-  gameScreenshots: ApiResponse | null;
-  fetchGameScreenshots: (gameID: number) => void;
-  loadingGameScreenshots: boolean;
-  gameScreenshotsError: Error | null;
-}
+import {
+  GameScreenshotsType,
+  GameScreenshotsApiResponse,
+} from "../types/types";
 
 const GameScreenshotsContext = createContext<GameScreenshotsType>({
   gameScreenshots: null,
@@ -28,9 +16,8 @@ const GameScreenshotsContext = createContext<GameScreenshotsType>({
 export const GameScreenshotsProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [gameScreenshots, setGameScreenshots] = useState<ApiResponse | null>(
-    null
-  );
+  const [gameScreenshots, setGameScreenshots] =
+    useState<GameScreenshotsApiResponse | null>(null);
   const [loadingGameScreenshots, setLoadingGameScreenshots] =
     useState<boolean>(true);
   const [gameScreenshotsError, setGameScreenshotsError] =
@@ -38,7 +25,9 @@ export const GameScreenshotsProvider: FC<{ children: ReactNode }> = ({
 
   const fetchGameScreenshots = async (gameID: number) => {
     try {
-      const response = await axios.get<ApiResponse>(gameScreenshotsURL(gameID));
+      const response = await axios.get<GameScreenshotsApiResponse>(
+        gameScreenshotsURL(gameID)
+      );
       setGameScreenshots(response.data);
     } catch (err) {
       if (axios.isAxiosError(err)) {

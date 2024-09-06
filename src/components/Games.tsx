@@ -7,6 +7,11 @@ import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useNewGamesContext } from "../context/NewGamesContext";
 import { useGameSearch } from "../context/SearchContext";
 import Pagination from "./Pagination";
+import { GameListApiResponse, GameResult } from "../types/types";
+
+const forbidden = process.env.REACT_APP_FORBIDDEN_WORDS
+  ? process.env.REACT_APP_FORBIDDEN_WORDS.split(",")
+  : [];
 
 const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
   const { popularGames, loadingPopularGames, popularGamesError } =
@@ -20,7 +25,11 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
   const { searchResults, totalResults, searchedGameName } = useGameSearch();
 
   if (loadingPopularGames || loadingNewGames || loadingUpcomingGames)
-    return <Loader />;
+    return (
+      <LoaderWrapper>
+        <Loader />
+      </LoaderWrapper>
+    );
 
   if (popularGamesError) return <p>Error: {popularGamesError.message}</p>;
   if (newGamesError) return <p>Error: {newGamesError.message}</p>;
@@ -30,6 +39,12 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
     totalResults as number
   );
 
+  const filterGames = (games: GameListApiResponse): GameResult[] => {
+    return games.results.filter((game: GameResult) => {
+      return !forbidden.some((word) => game.name.toLowerCase().includes(word));
+    });
+  };
+
   return (
     <GameWrapper>
       {showDefaultGames ? (
@@ -38,7 +53,7 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
             <>
               <h2>Upcoming Games</h2>
               <GamesStyling>
-                {upcomingGames.results.map((game) => (
+                {filterGames(upcomingGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
                     name={game.name}
@@ -55,7 +70,7 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
             <>
               <h2>Popular Games</h2>
               <GamesStyling>
-                {popularGames.results.map((game) => (
+                {filterGames(popularGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
                     name={game.name}
@@ -72,7 +87,7 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
             <>
               <h2>New Games</h2>
               <GamesStyling>
-                {newGames.results.map((game) => (
+                {filterGames(newGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
                     name={game.name}
@@ -93,20 +108,29 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
                 {formattedResult} results for "{searchedGameName}"
               </h2>
               <GamesStyling>
-                {searchResults?.map((game) => (
-                  <Game
-                    key={game.id}
-                    name={game.name}
-                    released={game.released}
-                    image={game.background_image}
-                    gameID={game.id}
-                  />
-                ))}
+                {searchResults
+                  ?.filter(
+                    (game: GameResult) =>
+                      !forbidden.some((word) =>
+                        game.name.toLowerCase().includes(word)
+                      )
+                  )
+                  .map((game: GameResult) => (
+                    <Game
+                      key={game.id}
+                      name={game.name}
+                      released={game.released}
+                      image={game.background_image}
+                      gameID={game.id}
+                    />
+                  ))}
               </GamesStyling>
               <Pagination />
             </>
           ) : (
-            <Loader />
+            <LoaderWrapper>
+              <Loader />
+            </LoaderWrapper>
           )}
         </>
       )}
@@ -141,10 +165,17 @@ const GamesStyling = styled(motion.div)`
   }
 
   @media (max-width: 576px) {
-    grid-template-columns: 1fr; /* Single column layout for small screens */
+    grid-template-columns: 1fr;
     grid-column-gap: 1rem;
     grid-row-gap: 2rem;
   }
+`;
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
 `;
 
 export default Games;

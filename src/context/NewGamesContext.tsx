@@ -8,48 +8,23 @@ import {
 } from "react";
 import axios from "axios";
 import { getNewGamesURL } from "../api/api";
+import { NewGamesContextType, GameListApiResponse } from "../types/types";
 
-interface GameResult {
-  slug: string;
-  name: string;
-  playtime: number;
-  released: string;
-  background_image: string;
-  id: number;
-  platforms: {
-    name: string;
-    slug: string;
-  };
-}
-
-interface ApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: GameResult[];
-}
-
-export interface NexGamesContextType {
-  newGames: ApiResponse | null;
-  loadingNewGames: boolean;
-  newGamesError: Error | null;
-}
-
-const NewGamesContext = createContext<NexGamesContextType>({
+const NewGamesContext = createContext<NewGamesContextType>({
   newGames: null,
   loadingNewGames: false,
   newGamesError: null,
 });
 
 export const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [newGames, setNewGames] = useState<ApiResponse | null>(null);
+  const [newGames, setNewGames] = useState<GameListApiResponse | null>(null);
   const [loadingNewGames, setLoadingNewGames] = useState<boolean>(true);
   const [newGamesError, setNewGamesError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchNewGames = async () => {
       try {
-        const response = await axios.get<ApiResponse>(getNewGamesURL());
+        const response = await axios.get<GameListApiResponse>(getNewGamesURL());
         setNewGames(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
@@ -69,7 +44,7 @@ export const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
     fetchNewGames();
   }, []);
 
-  const value: NexGamesContextType = {
+  const value: NewGamesContextType = {
     newGames,
     loadingNewGames,
     newGamesError,
@@ -82,5 +57,5 @@ export const NewGamesProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export const useNewGamesContext = (): NexGamesContextType =>
+export const useNewGamesContext = (): NewGamesContextType =>
   useContext(NewGamesContext);
