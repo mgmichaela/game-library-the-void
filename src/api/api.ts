@@ -29,13 +29,10 @@ const lastYearDate = `${currentYear - 1}-${currentMonth}-${currentDay}`;
 const nextYearDate = `${currentYear + 1}-${currentMonth}-${currentDay}`;
 
 export const getPopularGamesURL = () =>
-  `${base_url}games?key=${apiKey}&dates=${lastYearDate},${currentDate}&ordering=-rating&page_size=10`;
+  `${base_url}games?key=${apiKey}&dates=${lastYearDate},${currentDate}&ordering=-rating&page_size=12`;
 
 export const getUpcomingGamesURL = () =>
-  `${base_url}games?key=${apiKey}&dates=${currentDate},${nextYearDate}&ordering=-added&page_size=10`;
-
-export const getNewGamesURL = () =>
-  `${base_url}games?key=${apiKey}&dates=${lastYearDate},${currentDate}&ordering=-released&page_size=10`;
+  `${base_url}games?key=${apiKey}&dates=${currentDate},${nextYearDate}&ordering=-added&page_size=12`;
 
 export const gameDetailsURL = (game_id: number) =>
   `${base_url}games/${game_id}?key=${apiKey}`;

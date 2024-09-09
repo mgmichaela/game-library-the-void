@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { PopularGamesProvider } from "./context/PopularGamesContext";
 import { UpcomingGamesProvider } from "./context/UpcomingGamesContext";
-import { NewGamesProvider } from "./context/NewGamesContext";
 import { GameDetailsProvider } from "./context/GameDetailsContext";
 import { GameScreenshotsProvider } from "./context/GameScreenshotsContext";
 import { RouterProvider } from "react-router-dom";
@@ -17,15 +16,13 @@ root.render(
   <React.StrictMode>
     <PopularGamesProvider>
       <UpcomingGamesProvider>
-        <NewGamesProvider>
-          <GameDetailsProvider>
-            <GameScreenshotsProvider>
-              <GameSearchProvider>
-                <RouterProvider router={router} />
-              </GameSearchProvider>
-            </GameScreenshotsProvider>
-          </GameDetailsProvider>
-        </NewGamesProvider>
+        <GameDetailsProvider>
+          <GameScreenshotsProvider>
+            <GameSearchProvider>
+              <RouterProvider router={router} />
+            </GameSearchProvider>
+          </GameScreenshotsProvider>
+        </GameDetailsProvider>
       </UpcomingGamesProvider>
     </PopularGamesProvider>
   </React.StrictMode>

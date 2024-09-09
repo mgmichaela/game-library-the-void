@@ -4,7 +4,6 @@ import Loader from "../components/Loader";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
-import { useNewGamesContext } from "../context/NewGamesContext";
 import { useGameSearch } from "../context/SearchContext";
 import Pagination from "./Pagination";
 import { GameListApiResponse, GameResult } from "../types/types";
@@ -21,17 +20,9 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
   const { upcomingGames, loadingUpcomingGames, upcomingGamesError } =
     useUpcomingGamesContext();
 
-  const { newGames, loadingNewGames, newGamesError } = useNewGamesContext();
+  const { searchResults, totalResults, searchedGameName } = useGameSearch();
 
-  const { searchResults, totalResults, searchedGameName, loadingSearch } =
-    useGameSearch();
-
-  if (
-    loadingPopularGames ||
-    loadingNewGames ||
-    loadingUpcomingGames ||
-    loadingSearch
-  )
+  if (loadingPopularGames || loadingUpcomingGames)
     return (
       <LoaderWrapper>
         <Loader />
@@ -39,7 +30,6 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
     );
 
   if (popularGamesError) return <p>Error: {popularGamesError.message}</p>;
-  if (newGamesError) return <p>Error: {newGamesError.message}</p>;
   if (upcomingGamesError) return <p>Error: {upcomingGamesError.message}</p>;
 
   const formattedResult = new Intl.NumberFormat("en-US").format(
@@ -56,23 +46,6 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
     <GameWrapper initial="hidden" animate="show" variants={fadeIn}>
       {showDefaultGames ? (
         <>
-          {upcomingGames && (
-            <>
-              <h2>Upcoming Games</h2>
-              <GamesStyling>
-                {filterGames(upcomingGames).map((game: GameResult) => (
-                  <Game
-                    key={game.id}
-                    name={game.name}
-                    released={game.released}
-                    image={game.background_image}
-                    gameID={game.id}
-                  />
-                ))}
-              </GamesStyling>
-            </>
-          )}
-
           {popularGames && (
             <>
               <h2>Popular Games</h2>
@@ -89,12 +62,11 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
               </GamesStyling>
             </>
           )}
-
-          {newGames && (
+          {upcomingGames && (
             <>
-              <h2>New Games</h2>
+              <h2>Upcoming Games</h2>
               <GamesStyling>
-                {filterGames(newGames).map((game: GameResult) => (
+                {filterGames(upcomingGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
                     name={game.name}

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useGameDetails } from "../context/GameDetailsContext";
 import { useGameScreenshots } from "../context/GameScreenshotsContext";
 import { Link } from "react-router-dom";
+import { popup } from "../animations/animation";
 
 interface GameProps {
   name: string;
@@ -28,7 +29,12 @@ const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
   };
 
   return (
-    <Card onClick={handleCardClick}>
+    <Card
+      variants={popup}
+      initial="hidden"
+      animate="show"
+      onClick={handleCardClick}
+    >
       <Link to={`games/${gameID}`}>
         <h3>{name}</h3>
         <p>{released}</p>

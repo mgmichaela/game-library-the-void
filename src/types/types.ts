@@ -61,12 +61,6 @@ export interface PopularGamesContextType {
   popularGamesError: Error | null;
 }
 
-export interface NewGamesContextType {
-  newGames: GameListApiResponse | null;
-  loadingNewGames: boolean;
-  newGamesError: Error | null;
-}
-
 export interface UpcomingGamesContextType {
   upcomingGames: GameListApiResponse | null;
   loadingUpcomingGames: boolean;
