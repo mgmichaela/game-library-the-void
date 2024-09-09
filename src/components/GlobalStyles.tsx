@@ -36,10 +36,19 @@ h2 {
     text-shadow: 1px 1px 1px #ff00a2, 0 0 0.5em #2c1b46, 0 0 0.1em #714c9d;
 }
 h3 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 1px 1px 1px #ff00a2, 0 0 0.5em #2c1b46, 0 0 0.1em #714c9d;
+    font-family: 'Montserrat';
+    padding-top: 1rem;
+}
+h4 {
     font-size: 1.3rem;
     font-weight: 500;
     color: #fff;
-    padding: 1rem 0 1rem 0;
+    padding: 1rem 0 1rem 0;  
+    font-family: 'Montserrat';
 }
 p {
     font-size: 1.2rem;

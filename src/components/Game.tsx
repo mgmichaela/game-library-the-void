@@ -36,7 +36,7 @@ const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
       onClick={handleCardClick}
     >
       <Link to={`games/${gameID}`}>
-        <h3>{name}</h3>
+        <h4>{name}</h4>
         <p>{released}</p>
         <img src={image} alt={name} />
       </Link>
@@ -55,7 +55,7 @@ const Card = styled(motion.div)`
   display: flex;
   flex-direction: column;
 
-  h3 {
+  h4 {
     margin: 0.5rem 0;
     font-size: 1.1rem;
   }
@@ -75,7 +75,7 @@ const Card = styled(motion.div)`
 
   @media (max-width: 768px) {
     height: 20rem;
-    h3 {
+    h4 {
       font-size: 1rem;
       margin: 0.5rem;
     }
@@ -86,7 +86,7 @@ const Card = styled(motion.div)`
 
   @media (max-width: 576px) {
     height: 18rem;
-    h3 {
+    h4 {
       font-size: 0.75rem;
       margin: 0.5rem;
     }

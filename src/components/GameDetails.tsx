@@ -13,8 +13,21 @@ import gamepad from "../images/gamepad.svg";
 import starFull from "../images/star-full.png";
 import starEmpty from "../images/star-empty.png";
 
+enum Platform {
+  playstation = "playstation",
+  xbox = "xbox",
+  pc = "steam",
+  nintendo = "nintendo",
+  apple = "apple",
+}
+
 const GameDetails = () => {
   const navigate = useNavigate();
+
+  const { gameDetails, loadingGameDetails } = useGameDetails();
+  const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
+
+  if (loadingGameDetails && loadingGameScreenshots) return <Loader />;
 
   const goBack = (e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.currentTarget;
@@ -26,21 +39,46 @@ const GameDetails = () => {
     }
   };
 
-  const getPlatform = (platform: string) => {
-    switch (platform) {
-      case "PlayStation 4":
-        return playstation;
-      case "Xbox One":
-        return xbox;
-      case "PC":
-        return steam;
-      case "Nintendo Switch":
-        return nintendo;
-      case "iOS":
-        return apple;
-      default:
-        return gamepad;
-    }
+  const platformIcons = {
+    [Platform.playstation]: playstation,
+    [Platform.xbox]: xbox,
+    [Platform.pc]: steam,
+    [Platform.nintendo]: nintendo,
+    [Platform.apple]: apple,
+  };
+
+  const getPlatformIcon = (platform: string) => {
+    const platformLowerCase = platform.toLowerCase();
+
+    const foundPlatform = Object.values(Platform).find((key) =>
+      platformLowerCase.includes(key)
+    );
+
+    return foundPlatform ? platformIcons[foundPlatform] : gamepad;
+  };
+
+  const platforms = Array.from(
+    new Set(
+      gameDetails?.platforms.map((platformItem) =>
+        platformItem.platform.name.toLowerCase()
+      )
+    )
+  );
+
+  const filterDuplicatePlatforms = (
+    platforms: string[],
+    platformEnum: typeof Platform
+  ) => {
+    const enumValues = Object.values(platformEnum);
+
+    return platforms.filter(
+      (platform, index, self) =>
+        !enumValues.some(
+          (enumValue) =>
+            platform.includes(enumValue) &&
+            self.findIndex((p) => p.includes(enumValue)) < index
+        )
+    );
   };
 
   const getStars = () => {
@@ -49,17 +87,14 @@ const GameDetails = () => {
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
         stars.push(<img alt="star" key={i} src={starFull}></img>);
+        stars.push(" ");
       } else {
         stars.push(<img alt="star" key={i} src={starEmpty}></img>);
+        stars.push(" ");
       }
     }
     return stars;
   };
-
-  const { gameDetails, loadingGameDetails } = useGameDetails();
-  const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
-
-  if (loadingGameDetails && loadingGameScreenshots) return <Loader />;
 
   return (
     <AnimatePresence>
@@ -90,19 +125,21 @@ const GameDetails = () => {
                 {getStars()}
               </motion.div>
               <Info>
-                <h3>Platforms</h3>
+                <h4>Platforms</h4>
                 <Platforms>
-                  {gameDetails?.platforms.map((platformItem) => (
-                    <motion.img
-                      key={platformItem.platform.id}
-                      src={getPlatform(platformItem.platform.name)}
-                      alt={platformItem.platform.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.2 }}
-                    ></motion.img>
-                  ))}
+                  {filterDuplicatePlatforms(platforms, Platform).map(
+                    (platform) => (
+                      <motion.img
+                        key={platform}
+                        src={getPlatformIcon(platform)}
+                        alt={platform}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.2 }}
+                      ></motion.img>
+                    )
+                  )}
                 </Platforms>
               </Info>
             </Stats>
