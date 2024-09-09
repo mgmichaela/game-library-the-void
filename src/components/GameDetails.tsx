@@ -70,20 +70,20 @@ const GameDetails = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.2 }}
         >
           <Detail
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.2 }}
           >
             <Stats>
               <motion.div
                 initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.2 }}
               >
                 <h3>{gameDetails?.name}</h3>
                 <p>Rating: {gameDetails?.rating}</p>
@@ -100,7 +100,7 @@ const GameDetails = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.4 }}
+                      transition={{ duration: 0.2 }}
                     ></motion.img>
                   ))}
                 </Platforms>
@@ -113,7 +113,7 @@ const GameDetails = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.2 }}
               />
             </Media>
             <Description>
@@ -121,7 +121,7 @@ const GameDetails = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.2 }}
               >
                 {gameDetails?.description_raw}
               </motion.p>
@@ -135,7 +135,7 @@ const GameDetails = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.4 }}
+                  transition={{ duration: 0.2 }}
                 />
               ))}
             </motion.div>
