@@ -8,6 +8,7 @@ import { useGameSearch } from "../context/SearchContext";
 import Pagination from "./Pagination";
 import { GameListApiResponse, GameResult } from "../types/types";
 import { fadeIn } from "../animations/animation";
+import NotAllowed from "./NotAllowed";
 
 const forbidden = process.env.REACT_APP_FORBIDDEN_WORDS
   ? process.env.REACT_APP_FORBIDDEN_WORDS.split(",")
@@ -40,6 +41,12 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
     return games.results.filter((game: GameResult) => {
       return !forbidden.some((word) => game.name.toLowerCase().includes(word));
     });
+  };
+
+  const containsForbiddenWord = (searchedGameName: string) => {
+    return forbidden.some((word) =>
+      searchedGameName.toLowerCase().includes(word)
+    );
   };
 
   return (
@@ -79,6 +86,8 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
             </>
           )}
         </>
+      ) : containsForbiddenWord(searchedGameName) ? (
+        <NotAllowed />
       ) : (
         <>
           {searchResults?.length ? (
