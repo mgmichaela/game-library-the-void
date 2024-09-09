@@ -16,9 +16,9 @@ import starEmpty from "../images/star-empty.png";
 enum Platform {
   playstation = "playstation",
   xbox = "xbox",
-  pc = "steam",
+  pc = "pc",
   nintendo = "nintendo",
-  apple = "apple",
+  ios = "apple",
 }
 
 const GameDetails = () => {
@@ -44,7 +44,7 @@ const GameDetails = () => {
     [Platform.xbox]: xbox,
     [Platform.pc]: steam,
     [Platform.nintendo]: nintendo,
-    [Platform.apple]: apple,
+    [Platform.ios]: apple,
   };
 
   const getPlatformIcon = (platform: string) => {
@@ -207,6 +207,9 @@ const Detail = styled(motion.div)`
   border-radius: 1rem;
   padding: 2rem 5rem;
   background: #050102;
+  box-shadow: 0 0 10px #ff00a2;
+  border-left: 0.5px solid #ff00a2;
+  border-right: 0.5px solid #ff00a2;
   position: absolute;
   left: 10%;
   color: #000;
@@ -217,7 +220,7 @@ const Detail = styled(motion.div)`
 
 const Stats = styled(motion.div)`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   img {
     width: 2rem;
@@ -228,13 +231,16 @@ const Stats = styled(motion.div)`
 
 const Info = styled(motion.div)`
   text-align: center;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Platforms = styled(motion.div)`
-  display: flex;
-  justify-content: space-evenly;
   img {
-    margin-left: 3rem;
+    margin: 0.5rem;
   }
 `;
 
