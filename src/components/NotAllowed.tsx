@@ -7,7 +7,7 @@ const NotAllowed: FC = () => {
     <div>
       <Heading>
         <img src={adultIcon} alt="icon" />
-        <h2>Age-restricted content</h2>
+        <h2>Age-restricted Content</h2>
       </Heading>
       <h4>Not allowed.</h4>
     </div>

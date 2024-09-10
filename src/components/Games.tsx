@@ -5,30 +5,35 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useUpcomingGamesContext } from "../context/UpcomingGamesContext";
 import { useGameSearch } from "../context/SearchContext";
-import Pagination from "./Pagination";
 import { GameListApiResponse, GameResult } from "../types/types";
 import { fadeIn } from "../animations/animation";
 import NotAllowed from "./NotAllowed";
+import { FC } from "react";
+import Pagination from "./Pagination";
 
-const forbidden = process.env.REACT_APP_FORBIDDEN_WORDS
+interface GamesProps {
+  showDefaultGames: boolean;
+}
+
+const forbiddenWords = process.env.REACT_APP_FORBIDDEN_WORDS
   ? process.env.REACT_APP_FORBIDDEN_WORDS.split(",")
   : [];
 
-const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
+const Games: FC<GamesProps> = ({ showDefaultGames }) => {
   const { popularGames, loadingPopularGames, popularGamesError } =
     usePopularGamesContext();
-
   const { upcomingGames, loadingUpcomingGames, upcomingGamesError } =
     useUpcomingGamesContext();
+  const { searchResults, totalResults, searchedGameName, loadingSearch } =
+    useGameSearch();
 
-  const { searchResults, totalResults, searchedGameName } = useGameSearch();
-
-  if (loadingPopularGames || loadingUpcomingGames)
+  if (loadingPopularGames || loadingUpcomingGames || loadingSearch) {
     return (
       <LoaderWrapper>
         <Loader />
       </LoaderWrapper>
     );
+  }
 
   if (popularGamesError) return <p>Error: {popularGamesError.message}</p>;
   if (upcomingGamesError) return <p>Error: {upcomingGamesError.message}</p>;
@@ -37,17 +42,14 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
     totalResults as number
   );
 
-  const filterGames = (games: GameListApiResponse): GameResult[] => {
-    return games.results.filter((game: GameResult) => {
-      return !forbidden.some((word) => game.name.toLowerCase().includes(word));
-    });
-  };
-
-  const containsForbiddenWord = (searchedGameName: string) => {
-    return forbidden.some((word) =>
-      searchedGameName.toLowerCase().includes(word)
+  const filterGames = (games: GameListApiResponse): GameResult[] =>
+    games.results.filter(
+      (game: GameResult) =>
+        !forbiddenWords.some((word) => game.name.toLowerCase().includes(word))
     );
-  };
+
+  const containsForbiddenWord = (name: string) =>
+    forbiddenWords.some((word) => name.toLowerCase().includes(word));
 
   return (
     <GameWrapper initial="hidden" animate="show" variants={fadeIn}>
@@ -55,8 +57,8 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
         <>
           {popularGames && (
             <>
-              <h2>Popular Games</h2>
-              <GamesStyling>
+              <SectionTitle>Popular Games</SectionTitle>
+              <GamesGrid>
                 {filterGames(popularGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
@@ -66,13 +68,13 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
                     gameID={game.id}
                   />
                 ))}
-              </GamesStyling>
+              </GamesGrid>
             </>
           )}
           {upcomingGames && (
             <>
-              <h2>Upcoming Games</h2>
-              <GamesStyling>
+              <SectionTitle>Upcoming Games</SectionTitle>
+              <GamesGrid>
                 {filterGames(upcomingGames).map((game: GameResult) => (
                   <Game
                     key={game.id}
@@ -82,45 +84,42 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
                     gameID={game.id}
                   />
                 ))}
-              </GamesStyling>
+              </GamesGrid>
             </>
           )}
         </>
       ) : containsForbiddenWord(searchedGameName) ? (
         <NotAllowed />
-      ) : (
+      ) : searchResults && searchResults.length > 0 ? (
         <>
-          {searchResults?.length ? (
-            <>
-              <h2>
-                {formattedResult} results for "{searchedGameName}"
-              </h2>
-              <GamesStyling>
-                {searchResults
-                  ?.filter(
-                    (game: GameResult) =>
-                      !forbidden.some((word) =>
-                        game.name.toLowerCase().includes(word)
-                      )
-                  )
-                  .map((game: GameResult) => (
-                    <Game
-                      key={game.id}
-                      name={game.name}
-                      released={game.released}
-                      image={game.background_image}
-                      gameID={game.id}
-                    />
-                  ))}
-              </GamesStyling>
+          <SectionWrapper
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <SectionTitle>
+              {formattedResult} results for "{searchedGameName}"
+            </SectionTitle>
+            <div>
               <Pagination />
-            </>
-          ) : (
-            <LoaderWrapper>
-              <Loader />
-            </LoaderWrapper>
-          )}
+            </div>
+          </SectionWrapper>
+          <GamesGrid>
+            {searchResults.map((game: GameResult) => (
+              <Game
+                key={game.id}
+                name={game.name}
+                released={game.released}
+                image={game.background_image}
+                gameID={game.id}
+              />
+            ))}
+          </GamesGrid>
         </>
+      ) : (
+        <p>No games found for "{searchedGameName}".</p>
       )}
     </GameWrapper>
   );
@@ -128,20 +127,22 @@ const Games = ({ showDefaultGames }: { showDefaultGames: boolean }) => {
 
 const GameWrapper = styled(motion.div)`
   padding: 0rem 5rem;
-  h2 {
-    padding: 5rem 0rem;
-  }
 
   @media (max-width: 576px) {
     padding: 0rem 1rem;
-    h2 {
-      font-size: 1.5rem;
-      padding: 0 0 1.5rem 0;
-    }
   }
 `;
 
-const GamesStyling = styled(motion.div)`
+const SectionTitle = styled.h2`
+  padding: 5rem 0rem;
+
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+    padding: 0 0 1.5rem 0;
+  }
+`;
+
+const GamesGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 3rem;
@@ -164,6 +165,12 @@ const LoaderWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 50vh;
+`;
+
+const SectionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export default Games;

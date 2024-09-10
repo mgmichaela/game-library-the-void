@@ -18,18 +18,17 @@ const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
   const { fetchGameScreenshots } = useGameScreenshots();
 
   const handleCardClick = () => {
-    // Calculate scrollbar width and add padding to prevent layout shift
     const scrollBarWidth =
       window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
-    document.body.style.paddingRight = `${scrollBarWidth}px`; // Fix layout shift caused by scrollbar
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
 
     fetchGameDetails(gameID);
     fetchGameScreenshots(gameID);
   };
 
   return (
-    <Card
+    <StyledCard
       variants={popup}
       initial="hidden"
       animate="show"
@@ -40,11 +39,11 @@ const Game: FC<GameProps> = ({ name, released, image, gameID }) => {
         <p>{released}</p>
         <img src={image} alt={name} />
       </Link>
-    </Card>
+    </StyledCard>
   );
 };
 
-const Card = styled(motion.div)`
+const StyledCard = styled(motion.div)`
   height: 25rem;
   box-shadow: 0 8px 16px #2c1b46;
   border: 2px solid #714c9d;
@@ -75,10 +74,12 @@ const Card = styled(motion.div)`
 
   @media (max-width: 768px) {
     height: 20rem;
+
     h4 {
       font-size: 1rem;
       margin: 0.5rem;
     }
+
     p {
       font-size: 0.9rem;
     }
@@ -86,10 +87,12 @@ const Card = styled(motion.div)`
 
   @media (max-width: 576px) {
     height: 18rem;
+
     h4 {
       font-size: 0.75rem;
       margin: 0.5rem;
     }
+
     p {
       font-size: 0.65rem;
     }

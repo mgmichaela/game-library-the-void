@@ -79,4 +79,5 @@ export interface GameSearchType {
   textInput: string;
   setSearchedGameName: (text: string) => void;
   searchedGameName: string;
+  currentPage: number;
 }

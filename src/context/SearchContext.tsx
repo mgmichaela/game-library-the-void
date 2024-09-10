@@ -19,6 +19,7 @@ const GameSearchContext = createContext<GameSearchType>({
   textInput: "",
   setSearchedGameName: () => {},
   searchedGameName: "",
+  currentPage: 1,
 });
 
 export const GameSearchProvider: FC<{ children: ReactNode }> = ({
@@ -32,6 +33,7 @@ export const GameSearchProvider: FC<{ children: ReactNode }> = ({
   const [prevPage, setPrevPage] = useState<string | null>(null);
   const [textInput, setTextInput] = useState<string>("");
   const [searchedGameName, setSearchedGameName] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const searchGames = async (query: string, page: number = 1) => {
     setLoadingSearch(true);
@@ -43,6 +45,7 @@ export const GameSearchProvider: FC<{ children: ReactNode }> = ({
       setTotalResults(response.data.count);
       setNextPage(response.data.next);
       setPrevPage(response.data.previous);
+      setCurrentPage(page);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setSearchError(err);
@@ -66,6 +69,7 @@ export const GameSearchProvider: FC<{ children: ReactNode }> = ({
     setTextInput,
     searchedGameName,
     setSearchedGameName,
+    currentPage,
   };
 
   return (

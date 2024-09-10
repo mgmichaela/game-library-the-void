@@ -12,6 +12,7 @@ import apple from "../images/apple.svg";
 import gamepad from "../images/gamepad.svg";
 import starFull from "../images/star-full.png";
 import starEmpty from "../images/star-empty.png";
+import { FC } from "react";
 
 enum Platform {
   playstation = "playstation",
@@ -21,18 +22,15 @@ enum Platform {
   ios = "apple",
 }
 
-const GameDetails = () => {
+const GameDetails: FC = () => {
   const navigate = useNavigate();
-
   const { gameDetails, loadingGameDetails } = useGameDetails();
   const { gameScreenshots, loadingGameScreenshots } = useGameScreenshots();
 
   if (loadingGameDetails && loadingGameScreenshots) return <Loader />;
 
   const goBack = (e: React.MouseEvent<HTMLDivElement>) => {
-    const element = e.currentTarget;
-
-    if (element.classList.contains("shadow")) {
+    if (e.currentTarget.classList.contains("shadow")) {
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0";
       navigate("/");
@@ -48,52 +46,39 @@ const GameDetails = () => {
   };
 
   const getPlatformIcon = (platform: string) => {
-    const platformLowerCase = platform.toLowerCase();
-
-    const foundPlatform = Object.values(Platform).find((key) =>
-      platformLowerCase.includes(key)
+    const platformKey = Object.values(Platform).find((key) =>
+      platform.toLowerCase().includes(key)
     );
-
-    return foundPlatform ? platformIcons[foundPlatform] : gamepad;
+    return platformKey ? platformIcons[platformKey] : gamepad;
   };
 
   const platforms = Array.from(
-    new Set(
-      gameDetails?.platforms.map((platformItem) =>
-        platformItem.platform.name.toLowerCase()
-      )
-    )
+    new Set(gameDetails?.platforms.map((p) => p.platform.name.toLowerCase()))
   );
 
   const filterDuplicatePlatforms = (
     platforms: string[],
     platformEnum: typeof Platform
-  ) => {
-    const enumValues = Object.values(platformEnum);
-
-    return platforms.filter(
+  ) =>
+    platforms.filter(
       (platform, index, self) =>
-        !enumValues.some(
+        !Object.values(platformEnum).some(
           (enumValue) =>
             platform.includes(enumValue) &&
             self.findIndex((p) => p.includes(enumValue)) < index
         )
     );
-  };
 
   const getStars = () => {
-    const stars = [];
-    const rating = Math.floor(gameDetails?.rating as number);
-    for (let i = 1; i <= 5; i++) {
-      if (i <= rating) {
-        stars.push(<img alt="star" key={i} src={starFull}></img>);
-        stars.push(" ");
-      } else {
-        stars.push(<img alt="star" key={i} src={starEmpty}></img>);
-        stars.push(" ");
-      }
-    }
-    return stars;
+    const rating = Math.floor(gameDetails?.rating || 0);
+    return Array.from({ length: 5 }, (_, i) => (
+      <img
+        alt="star"
+        key={i}
+        src={i < rating ? starFull : starEmpty}
+        style={{ margin: "0 0.1rem" }}
+      />
+    ));
   };
 
   return (
@@ -137,7 +122,7 @@ const GameDetails = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         transition={{ duration: 0.2 }}
-                      ></motion.img>
+                      />
                     )
                   )}
                 </Platforms>
@@ -146,7 +131,7 @@ const GameDetails = () => {
             <Media>
               <motion.img
                 src={gameDetails?.background_image}
-                alt="image"
+                alt="background"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -164,11 +149,11 @@ const GameDetails = () => {
               </motion.p>
             </Description>
             <motion.div className="gallery">
-              {gameScreenshots?.results.map((result) => (
+              {gameScreenshots?.results.map((screenshot) => (
                 <motion.img
-                  key={result.id}
-                  src={result.image}
-                  alt="game image"
+                  key={screenshot.id}
+                  src={screenshot.image}
+                  alt="game screenshot"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
@@ -212,7 +197,8 @@ const Detail = styled(motion.div)`
   border-right: 0.5px solid #ff00a2;
   position: absolute;
   left: 10%;
-  color: #000;
+  color: #fff;
+
   img {
     width: 100%;
   }
@@ -220,12 +206,11 @@ const Detail = styled(motion.div)`
 
 const Stats = styled(motion.div)`
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
+  align-items: flex-end;
   img {
     width: 2rem;
     height: 2rem;
-    display: inline;
   }
 `;
 
@@ -233,7 +218,6 @@ const Info = styled(motion.div)`
   text-align: center;
   padding: 0 1rem;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
 `;
@@ -246,9 +230,6 @@ const Platforms = styled(motion.div)`
 
 const Media = styled(motion.div)`
   margin-top: 5rem;
-  img {
-    width: 100%;
-  }
 `;
 
 const Description = styled(motion.div)`

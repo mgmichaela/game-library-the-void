@@ -1,40 +1,41 @@
-import { FC, useState, useEffect } from "react";
-import styled from "styled-components";
+import { FC } from "react";
 import { useGameSearch } from "../context/SearchContext";
+import styled from "styled-components";
 
 const Pagination: FC = () => {
-  const { textInput, nextPage, prevPage, searchGames } = useGameSearch();
+  const {
+    searchGames,
+    nextPage,
+    prevPage,
+    currentPage,
+    textInput,
+    searchedGameName,
+  } = useGameSearch();
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [textInput]);
-
-  const goToNextPage = () => {
+  const handleNextPage = () => {
     if (nextPage) {
-      searchGames(textInput, currentPage + 1);
-      setCurrentPage(currentPage + 1);
+      searchGames(searchedGameName || textInput, currentPage + 1);
     }
   };
 
-  const goToPrevPage = () => {
-    if (prevPage) {
-      searchGames(textInput, currentPage - 1);
-      setCurrentPage(currentPage - 1);
+  const handlePrevPage = () => {
+    if (prevPage && currentPage > 1) {
+      searchGames(searchedGameName || textInput, currentPage - 1);
     }
   };
 
   return (
-    <PaginationControls>
-      <button onClick={goToPrevPage} disabled={!prevPage}>
-        Previous
-      </button>
-      <span>page {currentPage}</span>
-      <button onClick={goToNextPage} disabled={!nextPage}>
-        Next
-      </button>
-    </PaginationControls>
+    <>
+      <PaginationControls>
+        <button onClick={handlePrevPage} disabled={!prevPage}>
+          Previous
+        </button>
+        <span>page {currentPage}</span>
+        <button onClick={handleNextPage} disabled={!nextPage}>
+          Next
+        </button>
+      </PaginationControls>
+    </>
   );
 };
 
@@ -44,6 +45,7 @@ const PaginationControls = styled.div`
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+
   button {
     border-radius: 4px;
     padding: 0.5rem 1rem;
@@ -52,13 +54,20 @@ const PaginationControls = styled.div`
     color: #fff;
     border: none;
     cursor: pointer;
+
+    &:hover {
+      background: #2c1b46;
+    }
+
     &:disabled {
       background-color: gray;
-      cursor: not-allowed;
+      cursor: default;
     }
   }
+
   span {
     padding: 0.5rem 1rem;
-    color: #fff;
+    color: #696969;
+    font-family: "Montserrat", sans-serif;
   }
 `;
