@@ -49,7 +49,7 @@ npm start
 localhost:3000
 ```
 
--
+---
 
 ## Additional Info
 
@@ -70,4 +70,4 @@ localhost:3000
 - User Authentication: Implement user login for saving favorite games.
 - Advanced Filters: Add filters to search by genre, release date, and rating.
 
-## HF!
+#### HF!
