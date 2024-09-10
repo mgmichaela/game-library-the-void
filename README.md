@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+# The Void - Game Library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**The Void** is a game library web app that allows users to explore a wide range of popular and upcoming games, with detailed information fetched from the largest multi-platform game database: RAWG. The app is built using **React** and **TypeScript**, with smooth animations, state management, and a responsive user interface.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Game Discovery**: Browse popular and upcoming games fetched from the RAWG API.
+- **Game Details**: Click on any game to see detailed information including descriptions, ratings, platforms, and more.
+- **Search Functionality**: Easily search for your favorite games by name.
+- **Pagination**: Implemented simple pagination for better data management while browsing large datasets.
+- **Loader Animation**: A stylish loading animation during data fetch, provided by [loading.io](https://loading.io/css/).
+- **Responsive Design**: Fully responsive layout for a seamless experience on all devices.
+- **Smooth Animations**: Transitions and interactions made with Framer Motion for an engaging experience.
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React**
+- **TypeScript**
+- **Axios**
+- **React DOM**
+- **Context API**
+- **Styled Components**
+- **Framer Motion**
+- **RAWG API**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Deployment
 
-### `npm test`
+This project is deployed via **Netlify**. You can visit the live version of the app [here](https://66e02897460c8c037bc55f3b--glittering-raindrop-99d45e.netlify.app/).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation and Setup Instructions
 
-### `npm run build`
+1. Clone this repository.
+2. Ensure you have **node** and **npm** installed globally on your machine.
+3. Install all the dependencies:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. To start the server:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+5. Fire up your favorite browser and visit:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+localhost:3000
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Additional Info
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Custom Hooks
 
-## Learn More
+- I'm using custom hooks to manage the global state for the games, providing data and actions throughout the app using Context API.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### API Source
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- RAWG API: The app uses the RAWG Video Games Database API to fetch game data. You can find more information about the API [here](https://rawg.io/apidocs).
+
+### Loader Animation
+
+- The loader animation when fetching game data is sourced from [loading.io](https://loading.io/css/).
+
+### Possible Future Improvements
+
+- User Authentication: Implement user login for saving favorite games.
+- Advanced Filters: Add filters to search by genre, release date, and rating.
+
+## HF!
